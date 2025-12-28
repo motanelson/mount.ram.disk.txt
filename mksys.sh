@@ -22,16 +22,23 @@ echo "[4] create syslinux.cfg..."
 cat << EOF > syslinux.cfg
 DEFAULT kernel
 LABEL kernel
-    KERNEL kernel.bin
+    KERNEL kernel.com
 EOF
 
-echo "[5] copy files into image..."
+echo "[5] create kernel ...."
+cat << EOF > kernel.asm
+loop0:
+    jmp loop0
+EOF
+
+echo "[6] compile kernel ...."
+nasm -f bin kernel.asm -o kernel.com
+
+echo "[7] copy files into image..."
 mcopy -i "$IMG" syslinux.cfg ::/syslinux.cfg
 
-# sample: kernel 
-echo "BOOT OK" > kernel.bin
-mcopy -i "$IMG" kernel.bin ::/kernel.bin
+echo "[8] copy kernel.com
+mcopy -i "$IMG" kernel.com ::/kernel.com
 
-rm kernel.bin syslinux.cfg
 
 echo "[OK] Image copy: $IMG"
