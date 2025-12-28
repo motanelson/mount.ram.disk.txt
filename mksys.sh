@@ -23,7 +23,7 @@ echo "[4] create syslinux.cfg..."
 cat << EOF > syslinux.cfg
 DEFAULT kernel
 LABEL kernel
-    KERNEL kernel.elf
+    KERNEL kernel.c32
 EOF
 
 echo "[5] create fake kernel..."
@@ -37,13 +37,14 @@ loop0:
 EOF
 
 echo "[6] compile kernel..."
-nasm -f elf64 kernel.asm -o kernel.o
-ld -o kernel.elf kernel.o -nostdlib
+nasm -f elf32 kernel.asm -o kernel.o
+ld -m elf_i386 -shared kernel.o -o kernel.c32
+
 echo "[7] copy syslinux.cfg..."
 mcopy -i "$IMG" syslinux.cfg ::/syslinux.cfg
 
 echo "[8] copy kernel.com..."
-mcopy -i "$IMG" kernel.elf ::/kernel.elf
+mcopy -i "$IMG" kernel.c32 ::/kernel.c32
 
 #rm -f syslinux.cfg kernel.asm kernel.com
 
