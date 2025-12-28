@@ -23,7 +23,7 @@ echo "[4] create syslinux.cfg..."
 cat << EOF > syslinux.cfg
 DEFAULT kernel
 LABEL kernel
-    KERNEL kernel.c32
+    KERNEL kernel.com
 EOF
 
 echo "[5] create fake kernel..."
